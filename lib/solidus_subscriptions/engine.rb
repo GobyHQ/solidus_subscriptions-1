@@ -1,6 +1,7 @@
 module SolidusSubscriptions
   class Engine < Rails::Engine
     require 'spree/core'
+    require 'solidus_subscriptions/permitted_attributes'
 
     isolate_namespace SolidusSubscriptions
     engine_name 'solidus_subscriptions'
@@ -11,9 +12,17 @@ module SolidusSubscriptions
     end
 
     config.autoload_paths << config.root.join('app', 'jobs')
-    config.autoload_paths << config.root.join('lib')
 
-    initializer 'solidus_subscriptions.configs', before: "spree.register.payment_methods" do
+    initializer 'require subscription lib helpers' do
+      require 'solidus_subscriptions/permitted_attributes'
+      require 'solidus_subscriptions/processor'
+    end
+
+    initializer 'configure spree subcription permitted attributes', after: 'require subscription lib helpers' do
+      PermittedAttributes.update_spree_permiteed_attributes
+    end
+
+    initializer 'solidus_subscriptions.configs', before: "require subscription lib helpers" do
       require 'solidus_subscriptions/config'
     end
 
@@ -39,7 +48,6 @@ module SolidusSubscriptions
       end
 
       Spree::Ability.register_ability(SolidusSubscriptions::Ability)
-      PermittedAttributes.update_spree_permiteed_attributes
     end
 
     config.to_prepare(&method(:activate).to_proc)
