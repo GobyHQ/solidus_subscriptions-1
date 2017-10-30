@@ -23,6 +23,7 @@ en:
         subscriptions:
           subscription:
             cancel: Cancel
+            cancel_alert: "Are you sure you want to cancel this subscription?"
             activate: Activate
             skip: Skip One
 
@@ -55,6 +56,13 @@ en:
       subscription_order_promotion_rule:
         name: Subscription Order
         description: Order fulfills a subscription
+
+    products:
+      cart_form:
+        quantity: I want
+        quantity_suffix: items
+        interval_length: every
+        subscription_fields: Subscription Settings
 
   activerecord:
     attributes:
