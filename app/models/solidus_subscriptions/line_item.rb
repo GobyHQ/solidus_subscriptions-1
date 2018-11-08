@@ -28,6 +28,7 @@ module SolidusSubscriptions
 
     validates :subscribable_id, presence: :true
     validates :quantity, numericality: { greater_than: 0 }
+    validates :quantity, numericality: { less_than: 10 }, unless: -> { order.user.admin? }
     validates :interval_length, numericality: { greater_than: 0 }, unless: -> { subscription }
 
     before_update :update_actionable_date_if_interval_changed
