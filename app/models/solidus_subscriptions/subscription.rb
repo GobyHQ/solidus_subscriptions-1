@@ -145,6 +145,7 @@ module SolidusSubscriptions
     # should not be processed again. Subscriptions without an end_date
     # value cannot be deactivated.
     def can_be_deactivated?
+      return false unless line_item
       active? && line_item.end_date && actionable_date > line_item.end_date
     end
 
